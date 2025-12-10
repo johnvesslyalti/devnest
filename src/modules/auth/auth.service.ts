@@ -22,7 +22,7 @@ export const authService = {
 
         const token = auth.generateToken(user.id)
 
-        return { user, token };
+        return { name: user.name, email: user.email, token };
     },
 
     async login(data: LoginInput) {
@@ -36,17 +36,17 @@ export const authService = {
 
         const token = auth.generateToken(user.id);
 
-        return { user, token }
+        return { name: user.name, email: user.email, token }
     },
 
     async deleteUser(data: LoginInput) {
-        const { email, password} = data;
+        const { email, password } = data;
 
         const user = await authRepository.findByEmail(email);
-        if(!user) throw new Error("Invalid credentials")
+        if (!user) throw new Error("Invalid credentials")
 
         const match = await bcrypt.compare(password, user.password);
-        if(!match) throw new Error("Invalid credentials");
+        if (!match) throw new Error("Invalid credentials");
 
         await authRepository.deleteUser(data)
     }

@@ -5,6 +5,6 @@ const router = Router();
 
 router.post("/", likeController.like);
 router.delete("/", likeController.unlike);
-router.get("/:postId", likeController.count)
+router.get("/", likeController.count)
 
 export default router;

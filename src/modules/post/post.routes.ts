@@ -5,6 +5,6 @@ const router = Router()
 
 router.post("/", postController.create)
 router.get("/", postController.findAll)
-router.get("/:id", postController.findOne)
+router.get("/", postController.findOne)
 
 export default router;
