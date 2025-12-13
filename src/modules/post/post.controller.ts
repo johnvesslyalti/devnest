@@ -17,9 +17,13 @@ export const postController = {
         res.json({ message: "Post created", post })
     },
 
-    async findAll(req: Request, res: Response) {
-        const posts = await postService.findAll();
-        res.json(posts);
+    async findByUserName(req: Request, res: Response) {
+
+        const { username } = req.params;
+
+        const posts = await postService.findByUserName(username);
+
+        return res.json(posts);
     },
 
     async findOne(req: Request, res: Response) {

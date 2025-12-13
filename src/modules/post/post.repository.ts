@@ -7,10 +7,26 @@ export const postRepo = {
         });
     },
 
-    findAll: () => {
+    findByUserName: (username: string) => {
         return prisma.post.findMany({
-            include: {
-                author: true,
+            where: {
+                author: {
+                    username: username
+                }
+            },
+            select: {
+                id: true,
+                content: true,
+                createdAt: true,
+
+                author: {
+                    select: {
+                        id: true,
+                        name: true,
+                        username: true,
+                        avatarUrl: true
+                    }
+                },
                 _count: { select: { likes: true, comments: true } }
             },
             orderBy: { createdAt: "desc" },

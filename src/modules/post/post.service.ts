@@ -4,7 +4,7 @@ export const postService = {
     create: (authorId: string, content: string) =>
         postRepo.create(authorId, content),
 
-    findAll: () => postRepo.findAll(),
+    findByUserName: (username: string) => postRepo.findByUserName(username),
 
     findOne: (id: string) => postRepo.findOne(id),
 }
