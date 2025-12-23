@@ -3,7 +3,7 @@ import { commentInput } from "./comment.schema";
 import { commentService } from "./comment.service";
 
 export const commentController = {
-    async create(req: Request<{}, {}, commentInput>, res: Response) {
+    create: async (req: Request<{}, {}, commentInput>, res: Response) => {
 
         const userId = req.user?.id
         if (!userId) {
