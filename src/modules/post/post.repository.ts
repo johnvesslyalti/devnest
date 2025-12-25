@@ -33,10 +33,13 @@ export const postRepo = {
         })
     },
 
-    findOne: (id: string) => {
+    findOne(id: string) {
         return prisma.post.findUnique({
             where: { id },
-            include: {
+            select: {
+                id: true,
+                content: true,
+                createdAt: true,
                 author: {
                     select: {
                         id: true,
@@ -44,25 +47,34 @@ export const postRepo = {
                         username: true,
                         avatarUrl: true
                     }
+                },
+                _count: {
+                    select: {
+                        likes: true,
+                        comments: true
+                    }
                 }
             }
         })
     },
 
-    findPublicFeed() {
+    findPublicFeed(cursor?: string) {
         return prisma.post.findMany({
-            orderBy: { createdAt: "desc" },
             take: 20,
+            ...(cursor && {
+                skip: 1,
+                cursor: { id: cursor }
+            }),
+            orderBy: { createdAt: "desc" },
             select: {
                 id: true,
                 content: true,
                 createdAt: true,
-
                 author: {
                     select: {
                         id: true,
                         username: true,
-                        avatarUrl: true,
+                        avatarUrl: true
                     }
                 },
                 _count: {
