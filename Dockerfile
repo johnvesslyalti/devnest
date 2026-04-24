@@ -27,6 +27,7 @@ RUN npm ci --omit=dev
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/node_modules/@internal ./node_modules/@internal
 COPY --from=builder /app/prisma ./prisma
+COPY --from=builder /app/scripts ./scripts
 COPY --from=builder /app/prisma.config.js ./
 
 CMD npx prisma migrate deploy --schema=./prisma/postgres/schema.prisma && npm run start:prod

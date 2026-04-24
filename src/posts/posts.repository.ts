@@ -38,7 +38,6 @@ export class PostsRepository {
       where: {
         author: {
           username,
-          deletedAt: null,
         },
       },
       select: {
@@ -62,7 +61,7 @@ export class PostsRepository {
 
   async findOne(id: string) {
     return this.prisma.post.findFirst({
-      where: { id, author: { deletedAt: null } },
+      where: { id },
       select: {
         id: true,
         content: true,
@@ -101,7 +100,6 @@ export class PostsRepository {
     const posts = await this.prisma.post.findMany({
       take: take + 1,
       where: {
-        author: { deletedAt: null },
         ...(cursorPost && {
           OR: [
             { createdAt: { lt: cursorPost.createdAt } },

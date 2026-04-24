@@ -76,7 +76,7 @@ export class AuthService {
     const { email, password } = data;
 
     const user = await this.prisma.user.findUnique({ where: { email } });
-    if (!user || user.deletedAt)
+    if (!user)
       throw new UnauthorizedException("Invalid credentials");
 
     // Google-only accounts have no password — direct them to use OAuth
@@ -169,7 +169,7 @@ export class AuthService {
       }
 
       const user = savedToken.user;
-      if (!user || user.deletedAt)
+      if (!user)
         throw new UnauthorizedException("User not found");
 
       const tokens = await this.generateTokens(user.id, ip, userAgent);
@@ -197,7 +197,7 @@ export class AuthService {
 
   async me(userId: string) {
     const user = await this.prisma.user.findUnique({ where: { id: userId } });
-    if (!user || user.deletedAt)
+    if (!user)
       throw new UnauthorizedException("User not found");
     return {
       data: {
@@ -275,18 +275,6 @@ export class AuthService {
     return { accessToken, refreshToken };
   }
 
-  async softDelete(userId: string) {
-    await this.prisma.$transaction([
-      this.prisma.user.update({
-        where: { id: userId },
-        data: { deletedAt: new Date() },
-      }),
-      this.prisma.refreshToken.updateMany({
-        where: { userId },
-        data: { revokedAt: new Date() },
-      }),
-    ]);
-  }
 
   async deleteAccount(userId: string) {
     // Because of onDelete: Cascade in the Prisma schema,

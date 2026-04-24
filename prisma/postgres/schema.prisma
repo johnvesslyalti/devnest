@@ -15,7 +15,6 @@ enum NotificationType {
 
 model User {
   id        String   @id @default(cuid())
-  deletedAt DateTime?
   name      String?
   username  String   @unique
   email     String   @unique
