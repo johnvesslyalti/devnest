@@ -13,6 +13,13 @@ enum NotificationType {
   FOLLOW
 }
 
+enum KnowledgeDocumentStatus {
+  PENDING
+  PROCESSING
+  READY
+  FAILED
+}
+
 model User {
   id        String   @id @default(cuid())
   name      String?
@@ -92,8 +99,7 @@ model Post {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@index([createdAt])
-  @@index([authorId, createdAt])
+  @@index([createdAt(sort: Desc), id(sort: Desc)])
 }
 
 model Comment {
@@ -169,4 +175,41 @@ model RefreshToken {
   createdAt   DateTime @default(now())
   
   @@index([userId])
+}
+
+model KnowledgeDocument {
+  id         String                  @id @default(cuid())
+  title      String
+  sourceType String
+  sourceUri  String?
+  checksum   String                  @unique
+  content    String                  @db.Text
+  metadata   Json?
+  status     KnowledgeDocumentStatus @default(PENDING)
+  error      String?                 @db.Text
+
+  chunks    KnowledgeChunk[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([status])
+  @@index([sourceType])
+}
+
+model KnowledgeChunk {
+  id          String   @id @default(cuid())
+  documentId  String
+  chunkIndex  Int
+  content     String   @db.Text
+  tokenCount  Int?
+  metadata    Json?
+  embedding   Unsupported("vector(1536)")?
+
+  document  KnowledgeDocument @relation(fields: [documentId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@unique([documentId, chunkIndex])
+  @@index([documentId])
 }
