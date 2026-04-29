@@ -100,6 +100,7 @@ model Post {
   updatedAt DateTime @updatedAt
 
   @@index([createdAt(sort: Desc), id(sort: Desc)])
+  @@index([authorId, createdAt(sort: Desc)])
 }
 
 model Comment {
