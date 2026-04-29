@@ -120,16 +120,21 @@ export class FeedRepository {
       return { items: [], nextCursor: null };
     }
 
+    // Fetch user's following list explicitly to avoid slow EXISTS subquery
+    const following = await this.prisma.follow.findMany({
+      where: { followerId: userId },
+      select: { followingId: true },
+    });
+    const followingIds = following.map((f) => f.followingId);
+
+    if (followingIds.length === 0) {
+      return { items: [], nextCursor: null };
+    }
+
     const posts = await this.prisma.post.findMany({
       take: take + 1,
       where: {
-        author: {
-          followers: {
-            some: {
-              followerId: userId,
-            },
-          },
-        },
+        authorId: { in: followingIds },
         ...(cursorPost && {
           OR: [
             { createdAt: { lt: cursorPost.createdAt } },
