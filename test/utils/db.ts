@@ -103,22 +103,13 @@ export const seedTestData = async (
 
   if (!userA || !userB) throw new Error('Seed: users not found after registration');
 
-  // Create soft-deleted user
-  const softDeletedUser = await prisma.user.create({
+  // Create a test user (soft delete is no longer supported)
+  const testUser = await prisma.user.create({
     data: {
-      name: 'Deleted User',
-      username: 'deleteduser',
-      email: 'deleted@test.com',
+      name: 'Test User',
+      username: 'testuser',
+      email: 'test@test.com',
       password: 'hashed_irrelevant',
-      deletedAt: new Date(),
-    },
-  });
-
-  // Create a post by soft-deleted user (to verify it's filtered out)
-  await prisma.post.create({
-    data: {
-      content: 'Post by deleted user',
-      authorId: softDeletedUser.id,
     },
   });
 

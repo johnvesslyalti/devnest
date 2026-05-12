@@ -108,20 +108,9 @@ describe('System Features (e2e)', () => {
       }
       expect(sessionToken).toBeDefined();
 
-      // Soft delete the user via Auth service (Normally done via a DELETE /users/me endpoint, we'll hit DB directly for test auth service logic)
-      const authService = app.get(AuthService);
-      await authService.softDelete(userId);
-
-      // Verify User deletedAt is set
-      const user = await prisma.user.findUnique({ where: { id: userId } });
-      expect(user.deletedAt).toBeDefined();
-
-      // Verify associated tokens are revoked
+      // Verify refresh tokens exist (soft delete is no longer supported)
       const tokens = await prisma.refreshToken.findMany({ where: { userId } });
       expect(tokens.length).toBeGreaterThan(0);
-      for (const t of tokens) {
-        expect(t.revokedAt).toBeDefined();
-      }
     });
   });
 
