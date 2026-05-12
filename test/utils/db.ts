@@ -66,7 +66,6 @@ export interface SeededData {
   tokenB: string;
   userAId: string;
   userBId: string;
-  softDeletedUserId: string;
   postByB: { id: string; content: string };
 }
 
