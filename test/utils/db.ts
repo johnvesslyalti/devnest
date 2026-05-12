@@ -134,7 +134,6 @@ export const seedTestData = async (
     tokenB,
     userAId: userA.id,
     userBId: userB.id,
-    softDeletedUserId: softDeletedUser.id,
     postByB: { id: postByB.id, content: postByB.content },
   };
 };
