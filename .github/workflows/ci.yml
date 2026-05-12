@@ -20,7 +20,7 @@ jobs:
     timeout-minutes: 20
     services:
       postgres:
-        image: postgres:15-alpine
+        image: ankane/pgvector:latest
         env:
           POSTGRES_DB: devnest_test
           POSTGRES_USER: postgres
@@ -75,12 +75,6 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
-
-      - name: Install pgvector extension
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y postgresql-client
-          PGPASSWORD=password123 psql -h localhost -U postgres -d devnest_test -c "CREATE EXTENSION IF NOT EXISTS vector"
 
       - name: Verify code quality and build
         run: npm run test:ci
