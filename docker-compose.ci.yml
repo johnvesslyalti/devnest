@@ -1,0 +1,42 @@
+services:
+  ci-test:
+    build:
+      context: .
+      target: builder
+    environment:
+      - CI=true
+      - NODE_ENV=test
+      - PORT=3001
+      - POSTGRES_URL=postgresql://postgres:password123@postgres:5432/devnest_test?schema=public
+      - REDIS_URL=redis://redis:6379
+      - ACCESS_SECRET=ci_access_secret
+      - REFRESH_SECRET=ci_refresh_secret
+      - GOOGLE_CLIENT_ID=ci_google_client_id
+      - GOOGLE_CLIENT_SECRET=ci_google_client_secret
+      - GOOGLE_CALLBACK_URL=http://localhost:3001/api/v1/auth/google/callback
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    command: ./scripts/ci-check.sh
+
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password123
+      POSTGRES_DB: devnest_test
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d devnest_test"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5

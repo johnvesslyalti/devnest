@@ -1,0 +1,8 @@
+node_modules/
+.env*
+dist/
+dist-test/
+.eslintcache
+.tsbuildinfo
+*.log
+k6-*.txt
