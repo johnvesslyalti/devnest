@@ -16,12 +16,18 @@ import { LoggingMiddleware } from "./common/middleware/logging.middleware";
 
 import { FeedModule } from "./feed/feed.module";
 import { EmailModule } from "./email/email.module";
+import { BullBoardModule } from "@bull-board/nestjs";
+import { ExpressAdapter } from "@bull-board/express";
 
 import { AppController } from "./app.controller";
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
+    BullBoardModule.forRoot({
+      route: "/admin/queues",
+      adapter: ExpressAdapter,
+    }),
     BullModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => {

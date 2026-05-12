@@ -118,14 +118,14 @@ REFRESH_SECRET=your_refresh_secret
 PORT=3000
 ```
 
-### 3️⃣ Start Infrastracture (Docker)
+### 3️⃣ Start Infrastructure (Docker)
 
-You can spin up the PostgreSQL and Redis instances utilizing the provided `docker-compose.yml`:
+You can spin up the PostgreSQL, Redis, and Background Worker instances utilizing the provided `docker-compose.yml`:
 
 ```bash
-docker-compose up postgres redis -d
+docker-compose up postgres redis worker -d
 ```
-*(Optionally, you can run the entire API inside Docker with `docker-compose up -d`)*
+*(Optionally, you can run the entire system inside Docker with `docker-compose up -d`)*
 
 ### 4️⃣ Backend Setup
 
