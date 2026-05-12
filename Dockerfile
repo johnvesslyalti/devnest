@@ -1,6 +1,6 @@
 # Stage 1: Build
 FROM node:22-slim AS builder
-RUN apt-get update -y && apt-get install -y openssl
+RUN apt-get update -y && apt-get install -y openssl postgresql-client
 
 WORKDIR /app
 
@@ -15,7 +15,7 @@ RUN npm run build
 
 # Stage 2: Production
 FROM node:22-slim AS production
-RUN apt-get update -y && apt-get install -y openssl
+RUN apt-get update -y && apt-get install -y openssl postgresql-client
 
 WORKDIR /app
 

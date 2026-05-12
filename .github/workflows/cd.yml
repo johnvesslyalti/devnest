@@ -45,3 +45,20 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+
+  deploy:
+    name: Deploy to Production
+    needs: publish-image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Deploy notification
+        run: |
+          echo "✅ Docker image built and pushed successfully"
+          echo "Image: ${{ env.IMAGE_NAME }}:latest"
+          echo "Configure your deployment platform below:"
+          echo "- Docker Swarm: Update service with new image"
+          echo "- Kubernetes: Update deployment with new image"
+          echo "- Other platforms: Pull and run the image"

@@ -76,6 +76,12 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Install pgvector extension
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y postgresql-client
+          PGPASSWORD=password123 psql -h localhost -U postgres -d devnest_test -c "CREATE EXTENSION IF NOT EXISTS vector"
+
       - name: Verify code quality and build
         run: npm run test:ci
 
