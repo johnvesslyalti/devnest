@@ -41,8 +41,6 @@ export class ProfileService {
       );
     }
 
-    if (!profile) return null;
-
     return {
       ...profile,
       isFollowing,
